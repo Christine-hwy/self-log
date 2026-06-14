@@ -1,0 +1,788 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>小白 Footprint Agent | 产品介绍</title>
+    <meta
+      name="description"
+      content="小白是一位专注于帮用户记录旅行回忆的 AI 语音助手，让旅行中的用户随时说、随时记。"
+    />
+    <style>
+      :root {
+        color-scheme: dark;
+        --bg: #020617;
+        --panel: rgba(15, 23, 42, 0.68);
+        --panel-strong: rgba(15, 23, 42, 0.9);
+        --line: rgba(148, 163, 184, 0.18);
+        --text: #f8fafc;
+        --muted: #94a3b8;
+        --soft: #cbd5e1;
+        --violet: #7c3aed;
+        --indigo: #4f46e5;
+        --cyan: #22d3ee;
+        --emerald: #34d399;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      html,
+      body {
+        min-height: 100%;
+        margin: 0;
+      }
+
+      body {
+        background:
+          radial-gradient(circle at 20% 12%, rgba(124, 58, 237, 0.24), transparent 34rem),
+          radial-gradient(circle at 82% 12%, rgba(34, 211, 238, 0.16), transparent 32rem),
+          linear-gradient(135deg, #020617 0%, #0f172a 52%, #020617 100%);
+        color: var(--text);
+        font-family:
+          Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+          sans-serif;
+      }
+
+      .page {
+        position: relative;
+        min-height: 100vh;
+        overflow: hidden;
+      }
+
+      .stars {
+        position: fixed;
+        inset: 0;
+        pointer-events: none;
+        background-image:
+          radial-gradient(circle, rgba(255, 255, 255, 0.38) 0 1px, transparent 1px),
+          radial-gradient(circle, rgba(125, 211, 252, 0.24) 0 1px, transparent 1px);
+        background-position:
+          0 0,
+          36px 54px;
+        background-size:
+          120px 120px,
+          180px 180px;
+        mask-image: linear-gradient(to bottom, black 0%, transparent 78%);
+      }
+
+      .shell {
+        position: relative;
+        z-index: 1;
+        width: min(1180px, calc(100% - 40px));
+        margin: 0 auto;
+        padding: 34px 0 54px;
+      }
+
+      .nav {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 20px;
+        padding: 14px 0 32px;
+      }
+
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        color: var(--text);
+        text-decoration: none;
+      }
+
+      .brand-mark {
+        display: grid;
+        width: 42px;
+        height: 42px;
+        place-items: center;
+        border: 1px solid rgba(34, 211, 238, 0.3);
+        border-radius: 14px;
+        background: linear-gradient(135deg, rgba(124, 58, 237, 0.95), rgba(34, 211, 238, 0.78));
+        box-shadow: 0 18px 42px rgba(79, 70, 229, 0.25);
+      }
+
+      .brand-mark::before {
+        width: 17px;
+        height: 17px;
+        border: 3px solid white;
+        border-top-color: transparent;
+        border-radius: 999px;
+        content: "";
+      }
+
+      .brand-title {
+        display: block;
+        font-size: 18px;
+        font-weight: 650;
+        letter-spacing: 0;
+      }
+
+      .brand-subtitle {
+        display: block;
+        color: var(--muted);
+        font-size: 12px;
+        margin-top: 2px;
+      }
+
+      .nav a {
+        color: var(--soft);
+        font-size: 14px;
+        text-decoration: none;
+      }
+
+      .hero {
+        display: grid;
+        grid-template-columns: minmax(0, 1.03fr) minmax(360px, 0.97fr);
+        gap: 44px;
+        align-items: center;
+        min-height: calc(100vh - 140px);
+        padding-bottom: 46px;
+      }
+
+      .eyebrow {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 22px;
+        padding: 8px 12px;
+        border: 1px solid rgba(34, 211, 238, 0.24);
+        border-radius: 999px;
+        background: rgba(8, 47, 73, 0.35);
+        color: #a5f3fc;
+        font-size: 13px;
+      }
+
+      .pulse-dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 999px;
+        background: var(--emerald);
+        box-shadow: 0 0 0 6px rgba(52, 211, 153, 0.1);
+      }
+
+      h1 {
+        max-width: 760px;
+        margin: 0;
+        color: var(--text);
+        font-size: clamp(46px, 6vw, 82px);
+        font-weight: 720;
+        line-height: 1.02;
+        letter-spacing: 0;
+      }
+
+      .lead {
+        max-width: 680px;
+        margin: 24px 0 0;
+        color: #cbd5e1;
+        font-size: clamp(17px, 2vw, 21px);
+        line-height: 1.72;
+      }
+
+      .hero-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        margin-top: 34px;
+      }
+
+      .button {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 46px;
+        padding: 0 18px;
+        border: 1px solid transparent;
+        border-radius: 12px;
+        color: white;
+        font-size: 14px;
+        font-weight: 650;
+        text-decoration: none;
+        transition:
+          transform 180ms ease,
+          border-color 180ms ease,
+          background 180ms ease;
+      }
+
+      .button:hover {
+        transform: translateY(-1px);
+      }
+
+      .button-primary {
+        background: linear-gradient(135deg, var(--violet), var(--indigo));
+        box-shadow: 0 18px 46px rgba(79, 70, 229, 0.28);
+      }
+
+      .button-secondary {
+        border-color: rgba(148, 163, 184, 0.22);
+        background: rgba(15, 23, 42, 0.72);
+      }
+
+      .visual {
+        position: relative;
+        display: grid;
+        min-height: 560px;
+        place-items: center;
+      }
+
+      .voice-stage {
+        position: relative;
+        display: grid;
+        width: min(100%, 520px);
+        min-height: 520px;
+        place-items: center;
+        border: 1px solid rgba(148, 163, 184, 0.12);
+        border-radius: 32px;
+        background:
+          linear-gradient(180deg, rgba(255, 255, 255, 0.96), rgba(224, 242, 254, 0.88)),
+          radial-gradient(circle, rgba(34, 211, 238, 0.15), transparent);
+        box-shadow: 0 30px 90px rgba(2, 6, 23, 0.38);
+        overflow: hidden;
+      }
+
+      .voice-orb {
+        position: relative;
+        width: 250px;
+        height: 250px;
+        border-radius: 9999px;
+        overflow: hidden;
+        background:
+          radial-gradient(circle at 50% 50%, rgba(0, 47, 120, 0.85) 0 3%, transparent 4%),
+          radial-gradient(circle at 55% 55%, rgba(118, 225, 220, 0.9), rgba(125, 222, 218, 0.66) 46%, rgba(142, 233, 230, 0.2) 68%, transparent 70%);
+        filter: saturate(1.14);
+        animation: voice-spin 6s linear infinite;
+      }
+
+      .voice-orb::before,
+      .voice-orb::after {
+        position: absolute;
+        border-radius: 9999px;
+        content: "";
+        pointer-events: none;
+      }
+
+      .voice-orb::before {
+        inset: 7%;
+        background:
+          conic-gradient(from 12deg, transparent 0 20deg, rgba(255, 255, 255, 0.96) 22deg 54deg, transparent 58deg 112deg, rgba(255, 255, 255, 0.9) 118deg 146deg, transparent 150deg 212deg, rgba(255, 255, 255, 0.86) 218deg 248deg, transparent 254deg 360deg);
+        filter: blur(6px);
+        mix-blend-mode: screen;
+      }
+
+      .voice-orb::after {
+        inset: 0;
+        background: radial-gradient(circle at 35% 35%, rgba(255, 255, 255, 0.34), transparent 32%);
+      }
+
+      .petal {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 48%;
+        height: 48%;
+        transform-origin: 0 0;
+        border-radius: 0 100% 100% 100%;
+        background: linear-gradient(45deg, rgba(255, 255, 255, 0.95), rgba(34, 211, 238, 0.65) 38%, rgba(0, 71, 171, 0.92) 76%, transparent);
+        filter: blur(6px);
+        mix-blend-mode: multiply;
+      }
+
+      .p1 {
+        transform: rotate(10deg) skewX(-18deg);
+      }
+
+      .p2 {
+        transform: rotate(72deg) skewX(-18deg);
+        opacity: 0.72;
+      }
+
+      .p3 {
+        transform: rotate(132deg) skewX(-18deg);
+        opacity: 0.58;
+      }
+
+      .p4 {
+        transform: rotate(192deg) skewX(-18deg);
+        opacity: 0.72;
+      }
+
+      .p5 {
+        transform: rotate(252deg) skewX(-18deg);
+        opacity: 0.64;
+      }
+
+      .p6 {
+        transform: rotate(312deg) skewX(-18deg);
+        opacity: 0.7;
+      }
+
+      .call-button {
+        position: absolute;
+        bottom: 96px;
+        left: 50%;
+        display: grid;
+        width: 78px;
+        height: 78px;
+        place-items: center;
+        transform: translateX(-50%);
+        border: 8px solid white;
+        border-radius: 999px;
+        background: #020617;
+        box-shadow: 0 24px 60px rgba(2, 6, 23, 0.3);
+      }
+
+      .call-button::before {
+        width: 24px;
+        height: 24px;
+        border: 7px solid white;
+        border-top: 0;
+        border-right: 0;
+        border-radius: 0 0 0 16px;
+        content: "";
+        transform: rotate(-35deg);
+      }
+
+      .orbit-card {
+        position: absolute;
+        right: 24px;
+        bottom: 28px;
+        width: min(82%, 330px);
+        padding: 16px;
+        border: 1px solid rgba(2, 132, 199, 0.16);
+        border-radius: 18px;
+        background: rgba(255, 255, 255, 0.86);
+        color: #0f172a;
+        box-shadow: 0 20px 54px rgba(15, 23, 42, 0.14);
+      }
+
+      .orbit-card strong {
+        display: block;
+        margin-bottom: 6px;
+        font-size: 14px;
+      }
+
+      .orbit-card span {
+        color: #475569;
+        font-size: 13px;
+        line-height: 1.5;
+      }
+
+      .section {
+        padding: 44px 0;
+      }
+
+      .section-head {
+        display: flex;
+        align-items: end;
+        justify-content: space-between;
+        gap: 24px;
+        margin-bottom: 22px;
+      }
+
+      .section h2 {
+        margin: 0;
+        font-size: clamp(28px, 4vw, 44px);
+        letter-spacing: 0;
+        line-height: 1.08;
+      }
+
+      .section-kicker {
+        margin: 0 0 10px;
+        color: #a5f3fc;
+        font-size: 13px;
+        font-weight: 650;
+        letter-spacing: 0;
+      }
+
+      .section-desc {
+        max-width: 540px;
+        margin: 0;
+        color: var(--muted);
+        font-size: 15px;
+        line-height: 1.75;
+      }
+
+      .grid-3 {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 16px;
+      }
+
+      .feature,
+      .wide-panel,
+      .step {
+        border: 1px solid var(--line);
+        border-radius: 20px;
+        background: var(--panel);
+        backdrop-filter: blur(18px);
+        box-shadow: 0 20px 80px rgba(2, 6, 23, 0.18);
+      }
+
+      .feature {
+        min-height: 230px;
+        padding: 22px;
+      }
+
+      .feature-number {
+        display: grid;
+        width: 40px;
+        height: 40px;
+        place-items: center;
+        margin-bottom: 26px;
+        border: 1px solid rgba(34, 211, 238, 0.22);
+        border-radius: 12px;
+        background: rgba(8, 47, 73, 0.34);
+        color: #a5f3fc;
+        font-weight: 700;
+      }
+
+      .feature h3,
+      .step h3 {
+        margin: 0 0 12px;
+        font-size: 20px;
+        letter-spacing: 0;
+      }
+
+      .feature p,
+      .step p {
+        margin: 0;
+        color: var(--muted);
+        font-size: 14px;
+        line-height: 1.72;
+      }
+
+      .wide-panel {
+        display: grid;
+        grid-template-columns: 1.18fr 0.82fr;
+        gap: 26px;
+        align-items: center;
+        padding: 26px;
+      }
+
+      .product-preview {
+        position: relative;
+        width: 100%;
+        margin: 0 auto;
+        padding: 8px;
+        border: 1px solid rgba(34, 211, 238, 0.18);
+        border-radius: 20px;
+        background:
+          linear-gradient(135deg, rgba(34, 211, 238, 0.14), rgba(124, 58, 237, 0.08)),
+          rgba(2, 6, 23, 0.72);
+        box-shadow: 0 28px 90px rgba(2, 6, 23, 0.38);
+        overflow: hidden;
+      }
+
+      .product-preview::before {
+        position: absolute;
+        inset: -30%;
+        background: radial-gradient(circle, rgba(34, 211, 238, 0.18), transparent 52%);
+        content: "";
+        pointer-events: none;
+      }
+
+      .product-preview img {
+        position: relative;
+        display: block;
+        width: 100%;
+        border-radius: 14px;
+        box-shadow: 0 18px 50px rgba(2, 6, 23, 0.28);
+      }
+
+      .copy-block p {
+        margin: 0 0 18px;
+        color: var(--soft);
+        font-size: 16px;
+        line-height: 1.86;
+      }
+
+      .copy-block p:last-child {
+        margin-bottom: 0;
+      }
+
+      .steps {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 14px;
+      }
+
+      .step {
+        padding: 20px;
+      }
+
+      .step-tag {
+        display: inline-flex;
+        margin-bottom: 16px;
+        padding: 6px 9px;
+        border-radius: 999px;
+        background: rgba(124, 58, 237, 0.18);
+        color: #c4b5fd;
+        font-size: 12px;
+        font-weight: 650;
+      }
+
+      .closing {
+        display: grid;
+        grid-template-columns: 1fr auto;
+        gap: 24px;
+        align-items: center;
+        margin-top: 42px;
+        padding: 26px;
+        border: 1px solid rgba(52, 211, 153, 0.2);
+        border-radius: 24px;
+        background:
+          linear-gradient(135deg, rgba(16, 185, 129, 0.13), rgba(34, 211, 238, 0.08)),
+          var(--panel-strong);
+      }
+
+      .closing p {
+        max-width: 760px;
+        margin: 0;
+        color: var(--text);
+        font-size: clamp(20px, 3vw, 30px);
+        font-weight: 650;
+        line-height: 1.35;
+        letter-spacing: 0;
+      }
+
+      @keyframes voice-spin {
+        from {
+          transform: rotate(0deg) scale(1);
+        }
+        50% {
+          transform: rotate(180deg) scale(1.04);
+        }
+        to {
+          transform: rotate(360deg) scale(1);
+        }
+      }
+
+      @media (max-width: 900px) {
+        .shell {
+          width: min(100% - 28px, 720px);
+          padding-top: 20px;
+        }
+
+        .nav {
+          padding-bottom: 20px;
+        }
+
+        .hero,
+        .wide-panel,
+        .closing {
+          grid-template-columns: 1fr;
+        }
+
+        .hero {
+          gap: 28px;
+          min-height: 0;
+        }
+
+        .visual {
+          min-height: 420px;
+        }
+
+        .voice-stage {
+          min-height: 420px;
+        }
+
+        .grid-3,
+        .steps {
+          grid-template-columns: 1fr;
+        }
+
+        .section-head {
+          display: block;
+        }
+
+        .section-desc {
+          margin-top: 14px;
+        }
+      }
+
+      @media (max-width: 560px) {
+        .nav {
+          align-items: flex-start;
+          flex-direction: column;
+        }
+
+        .voice-orb {
+          width: 210px;
+          height: 210px;
+        }
+
+        .call-button {
+          bottom: 72px;
+        }
+
+        .orbit-card {
+          right: 14px;
+          bottom: 14px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="page">
+      <div class="stars"></div>
+
+      <div class="shell">
+        <nav class="nav" aria-label="产品导航">
+          <a class="brand" href="/">
+            <span class="brand-mark" aria-hidden="true"></span>
+            <span>
+              <span class="brand-title">小白 Footprint Agent</span>
+              <span class="brand-subtitle">AI 旅行回忆语音助手</span>
+            </span>
+          </a>
+          <a href="/">回到地球足迹</a>
+        </nav>
+
+        <section class="hero">
+          <div>
+            <div class="eyebrow"><span class="pulse-dot"></span> 随时说，随时记</div>
+            <h1>把每一段旅途，都变成会发光的回忆足迹。</h1>
+            <p class="lead">
+              小白是一位专注于帮用户记录旅行回忆的 AI 语音助手。你在路上只要说一句话，它就帮你理解地点、时间、照片、视频和情绪，把这段旅程保存到你的地球足迹里。
+            </p>
+            <div class="hero-actions">
+              <a class="button button-primary" href="/">体验地球足迹</a>
+              <a class="button button-secondary" href="#why">为什么需要</a>
+            </div>
+          </div>
+
+          <div class="visual" aria-label="语音交互示意">
+            <div class="voice-stage">
+              <div class="voice-orb" aria-hidden="true">
+                <span class="petal p1"></span>
+                <span class="petal p2"></span>
+                <span class="petal p3"></span>
+                <span class="petal p4"></span>
+                <span class="petal p5"></span>
+                <span class="petal p6"></span>
+              </div>
+              <div class="call-button" aria-hidden="true"></div>
+              <div class="orbit-card">
+                <strong>“今天我在西湖看日落，帮我记录一下。”</strong>
+                <span>小白会生成足迹、关联当天媒体，并整理成可回看的旅行记忆。</span>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="section" id="why">
+          <div class="section-head">
+            <div>
+              <p class="section-kicker">为什么需要它</p>
+              <h2>旅行回忆最容易丢在相册里。</h2>
+            </div>
+            <p class="section-desc">
+              很多人不是不想记录，而是整理旅行回忆的成本太高。小白把“事后整理”变成“当下自然发生”。
+            </p>
+          </div>
+          <div class="grid-3">
+            <article class="feature">
+              <div class="feature-number">痛点</div>
+              <h3>素材很多，没有体系</h3>
+              <p>手机里有大量照片和视频，却缺少时间、地点、故事和情绪。几年后再看，很难想起那一刻具体发生了什么。</p>
+            </article>
+            <article class="feature">
+              <div class="feature-number">痛点</div>
+              <h3>编辑成本太高</h3>
+              <p>写日记、挑照片、剪视频、拼碎片素材都需要精力。旅行结束后越拖越不想整理。</p>
+            </article>
+            <article class="feature">
+              <div class="feature-number">机会</div>
+              <h3>语音是最低成本的记录</h3>
+              <p>人在旅途中最自然的表达方式就是“说”。小白把一句话变成可保存、可回看、可延展的旅行记忆。</p>
+            </article>
+          </div>
+        </section>
+
+        <section class="section" id="audience">
+          <div class="section-head">
+            <div>
+              <p class="section-kicker">面向什么用户</p>
+              <h2>给热爱旅行、也热爱生活记录的人。</h2>
+            </div>
+            <p class="section-desc">
+              他们习惯在旅途中拍照、拍视频、记录瞬间，但不想在旅行结束后再花大量时间整理素材。
+            </p>
+          </div>
+          <div class="grid-3">
+            <article class="feature">
+              <div class="feature-number">01</div>
+              <h3>旅行中一直在拍</h3>
+              <p>照片和视频很多，但真正能讲清楚故事的回忆很少，小白帮你把素材和当时发生的事连起来。</p>
+            </article>
+            <article class="feature">
+              <div class="feature-number">02</div>
+              <h3>想记录但不想整理</h3>
+              <p>不需要回来再写长日记、翻相册、剪视频；旅途中说完，小白就先替你保存结构。</p>
+            </article>
+            <article class="feature">
+              <div class="feature-number">03</div>
+              <h3>想多年后还能想起</h3>
+              <p>不只是“去过哪里”，而是记得那天为什么开心、和谁同行、看到什么、说过什么。</p>
+            </article>
+          </div>
+        </section>
+
+        <section class="section" id="what">
+          <div class="wide-panel">
+            <div class="product-preview" aria-label="小白地球足迹产品界面截图">
+              <img src="assets/product-app-preview.png" alt="小白 Footprint Agent 与地球足迹界面" />
+            </div>
+            <div class="copy-block">
+              <p>
+                小白不是日记本，不是地图，也不是攻略工具。它是一位随时待命、听你说完就帮你存好的旅行伙伴。
+              </p>
+              <p>
+                它的核心目标是帮助旅行中的用户「随时说、随时记」，让每一段旅途都被留住，并在地球上形成属于你的记忆坐标。
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <section class="section" id="how">
+          <div class="section-head">
+            <div>
+              <p class="section-kicker">怎么做</p>
+              <h2>Agent-first 的旅行记录工作流。</h2>
+            </div>
+            <p class="section-desc">
+              小白不要求用户先填表，而是先听懂用户，再自动完成记录、匹配、生成和整理。
+            </p>
+          </div>
+          <div class="steps">
+            <article class="step">
+              <span class="step-tag">Voice first</span>
+              <h3>一句话创建足迹</h3>
+              <p>用户说出今天去了哪里、做了什么，小白自动识别地点、时间和事件，在地球上建立足迹图标。</p>
+            </article>
+            <article class="step">
+              <span class="step-tag">Album match</span>
+              <h3>自动匹配相册</h3>
+              <p>系统根据手机相册的拍摄时间和游玩发生时间，自动关联当天相关照片和视频。</p>
+            </article>
+            <article class="step">
+              <span class="step-tag">Diary</span>
+              <h3>生成旅行日记</h3>
+              <p>用户可以自己写，也可以让小白根据过去的记录习惯，生成更像用户本人的旅行文字。</p>
+            </article>
+            <article class="step">
+              <span class="step-tag">Auto edit</span>
+              <h3>辅助自动剪辑</h3>
+              <p>小白帮你组织素材、生成剪辑方向，并在关键节点询问偏好，让回忆视频更贴近你的感受。</p>
+            </article>
+          </div>
+
+          <div class="closing">
+            <p>小白是一个用语音帮你自动记录旅行足迹、整理照片视频、生成旅行日记和回忆剪辑的 AI 旅行伙伴。</p>
+            <a class="button button-primary" href="/">打开原型</a>
+          </div>
+        </section>
+      </div>
+    </main>
+  </body>
+</html>
