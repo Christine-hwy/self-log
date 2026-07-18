@@ -1,7 +1,9 @@
 import { useEffect, useRef, useState } from 'react';
 import Globe from 'globe.gl';
 import { TravelMemory } from '../../data/site';
-import { worldLocations } from '../../data/worldLocations';
+import { geoLabels } from '../../data/geoLabels';
+import { getVisibleGeoLabels } from './geoLabelVisibility';
+import { createMemoryBadgeElement } from './globeMarkerBadge';
 
 interface GlobeViewProps {
   memories: TravelMemory[];
@@ -42,6 +44,17 @@ export function GlobeView({ memories, onLocationClick, onMemoryClick }: GlobeVie
     myGlobe.controls().autoRotate = true;
     myGlobe.controls().autoRotateSpeed = 0.3;
 
+    // 悬停时暂停自动旋转，移出后恢复
+    const container = containerRef.current;
+    const handlePointerEnter = () => {
+      myGlobe.controls().autoRotate = false;
+    };
+    const handlePointerLeave = () => {
+      myGlobe.controls().autoRotate = true;
+    };
+    container.addEventListener('pointerenter', handlePointerEnter);
+    container.addEventListener('pointerleave', handlePointerLeave);
+
     myGlobe.pointOfView({ altitude: 2.2 });
 
     // 监听缩放变化
@@ -68,6 +81,8 @@ export function GlobeView({ memories, onLocationClick, onMemoryClick }: GlobeVie
 
     return () => {
       window.removeEventListener('resize', handleResize);
+      container.removeEventListener('pointerenter', handlePointerEnter);
+      container.removeEventListener('pointerleave', handlePointerLeave);
       if (globeRef.current) {
         globeRef.current._destructor?.();
         globeRef.current = null;
@@ -85,7 +100,7 @@ export function GlobeView({ memories, onLocationClick, onMemoryClick }: GlobeVie
       .pointsData(memories)
       .pointLat('lat')
       .pointLng('lng')
-      .pointColor(() => '#c084fc')
+      .pointColor(() => 'rgba(0,0,0,0)')
       .pointAltitude(0.01)
       .pointRadius(0.5)
       .pointLabel((d: any) => {
@@ -201,44 +216,46 @@ export function GlobeView({ memories, onLocationClick, onMemoryClick }: GlobeVie
       });
     }
 
-    // 添加用户旅行记忆标签（紫色）
-    globeRef.current
-      .labelsData(memories)
-      .labelLat('lat')
-      .labelLng('lng')
-      .labelText('location')
-      .labelSize(() => altitude < 1.8 ? 1.2 : 0) // 放大时显示标签
-      .labelDotRadius(0.4)
-      .labelColor(() => 'rgba(192, 132, 252, 1)') // 紫色 - 用户的旅行地点
-      .labelResolution(3)
-      .labelAltitude(0.01);
-
-    // 添加世界地理位置标签（白色/蓝色）
-    const geoLabels = worldLocations.map(loc => ({
-      ...loc,
-      lat: loc.lat,
-      lng: loc.lng,
-      text: loc.name,
-      size: loc.size || 1.0
+    // 世界地理位置标签（国家/城市），按当前缩放层级过滤，Google Maps 式渐进展示
+    const visibleGeoLabels = getVisibleGeoLabels(geoLabels, altitude);
+    const geoLabelEntries = visibleGeoLabels.map(label => ({
+      kind: 'geo-label' as const,
+      ...label,
+      text: label.name,
+      size: label.kind === 'country' ? 1.2 : label.tier === 'tier1' ? 1.1 : label.tier === 'tier2' ? 0.95 : 0.85,
     }));
 
+    // 记忆点图标徽章（替代原来的紫色圆点+文字标签）
+    const memoryBadgeEntries = memories.map(memory => ({
+      kind: 'memory-badge' as const,
+      memory,
+      lat: memory.lat,
+      lng: memory.lng,
+    }));
+
+    const combinedHtmlEntries = [...geoLabelEntries, ...memoryBadgeEntries];
+
     globeRef.current
-      .htmlElementsData(geoLabels)
+      .htmlElementsData(combinedHtmlEntries)
       .htmlLat('lat')
       .htmlLng('lng')
       .htmlElement((d: any) => {
+        if (d.kind === 'memory-badge') {
+          return createMemoryBadgeElement(d.memory);
+        }
+
         const el = document.createElement('div');
         el.style.cssText = `
-          color: ${d.type === 'country' ? 'rgba(147, 197, 253, 0.9)' : 'rgba(226, 232, 240, 0.8)'};
-          font-size: ${altitude < 1.5 ? (d.size * 12) : altitude < 2.5 ? (d.size * 8) : 0}px;
-          font-weight: ${d.type === 'country' ? '600' : '500'};
+          color: ${d.kind === 'country' ? 'rgba(147, 197, 253, 0.9)' : 'rgba(226, 232, 240, 0.8)'};
+          font-size: ${d.kind === 'country' ? (d.size * 10) : (d.size * 9)}px;
+          font-weight: ${d.kind === 'country' ? '600' : '500'};
           font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
           pointer-events: none;
           user-select: none;
           text-shadow: 0 0 4px rgba(0,0,0,0.8), 0 0 8px rgba(0,0,0,0.6);
           white-space: nowrap;
           letter-spacing: 0.5px;
-          opacity: ${altitude < 1.5 ? 1 : altitude < 2.5 ? 0.7 : 0};
+          opacity: 1;
           transition: opacity 0.3s ease, font-size 0.3s ease;
         `;
         el.textContent = d.text;

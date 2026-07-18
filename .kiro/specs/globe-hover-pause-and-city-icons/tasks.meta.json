@@ -1,0 +1,186 @@
+{
+  "pbtResults": {},
+  "executionHistory": {
+    "1. Set up test tooling": [
+      {
+        "executionId": "a9aef92d-6cfb-4374-b628-44780c9fdcd1",
+        "chatSessionId": "sess_8791c918-a699-4948-a559-edf059437c66",
+        "timestamp": 1784394382683
+      },
+      {
+        "executionId": "a9aef92d-6cfb-4374-b628-44780c9fdcd1",
+        "chatSessionId": "sess_8791c918-a699-4948-a559-edf059437c66",
+        "timestamp": 1784394390017
+      },
+      {
+        "executionId": "a9aef92d-6cfb-4374-b628-44780c9fdcd1",
+        "chatSessionId": "sess_8791c918-a699-4948-a559-edf059437c66",
+        "timestamp": 1784409187099
+      }
+    ],
+    "2.1 Create `src/data/cityIcons.ts` with `CityIconEntry` interface, the `CITY_ICON_MAP` array (Paris, Tokyo, New York, London, Hong Kong, Guangzhou, Shanghai, Sydney using distinct `lucide-react` icons per the design), `DEFAULT_MARKER_ICON`, and the exported `resolveCityIcon(location: string): LucideIcon` function performing case-insensitive substring matching": [
+      {
+        "executionId": "a9aef92d-6cfb-4374-b628-44780c9fdcd1",
+        "chatSessionId": "sess_8791c918-a699-4948-a559-edf059437c66",
+        "timestamp": 1784394382791
+      },
+      {
+        "executionId": "a9aef92d-6cfb-4374-b628-44780c9fdcd1",
+        "chatSessionId": "sess_8791c918-a699-4948-a559-edf059437c66",
+        "timestamp": 1784409197293
+      },
+      {
+        "executionId": "a9aef92d-6cfb-4374-b628-44780c9fdcd1",
+        "chatSessionId": "sess_8791c918-a699-4948-a559-edf059437c66",
+        "timestamp": 1784410026537
+      }
+    ],
+    "3.1 Create `src/app/components/globeMarkerBadge.tsx` exporting `MARKER_BADGE_SIZE_PX`, `MARKER_ICON_SIZE_PX`, `MARKER_ICON_COLOR`, `MARKER_ICON_STROKE_WIDTH` constants and the `createMemoryBadgeElement(memory: TravelMemory): HTMLDivElement` function that renders the resolved icon via `renderToStaticMarkup` into a fixed-size glass badge `<div>` with `pointer-events: none`": [
+      {
+        "executionId": "a9aef92d-6cfb-4374-b628-44780c9fdcd1",
+        "chatSessionId": "sess_8791c918-a699-4948-a559-edf059437c66",
+        "timestamp": 1784394382873
+      },
+      {
+        "executionId": "a9aef92d-6cfb-4374-b628-44780c9fdcd1",
+        "chatSessionId": "sess_8791c918-a699-4948-a559-edf059437c66",
+        "timestamp": 1784410172506
+      },
+      {
+        "executionId": "a9aef92d-6cfb-4374-b628-44780c9fdcd1",
+        "chatSessionId": "sess_8791c918-a699-4948-a559-edf059437c66",
+        "timestamp": 1784410389542
+      }
+    ],
+    "4. Checkpoint - Ensure all tests pass": [
+      {
+        "executionId": "a9aef92d-6cfb-4374-b628-44780c9fdcd1",
+        "chatSessionId": "sess_8791c918-a699-4948-a559-edf059437c66",
+        "timestamp": 1784394382920
+      },
+      {
+        "executionId": "a9aef92d-6cfb-4374-b628-44780c9fdcd1",
+        "chatSessionId": "sess_8791c918-a699-4948-a559-edf059437c66",
+        "timestamp": 1784410453258
+      },
+      {
+        "executionId": "a9aef92d-6cfb-4374-b628-44780c9fdcd1",
+        "chatSessionId": "sess_8791c918-a699-4948-a559-edf059437c66",
+        "timestamp": 1784410556508
+      }
+    ],
+    "5.1 In the mount `useEffect` of `GlobeView.tsx`, add `pointerenter`/`pointerleave` listeners on `containerRef.current` that set `myGlobe.controls().autoRotate` to `false`/`true` respectively, and remove both listeners in the effect's existing cleanup function": [
+      {
+        "executionId": "a9aef92d-6cfb-4374-b628-44780c9fdcd1",
+        "chatSessionId": "sess_8791c918-a699-4948-a559-edf059437c66",
+        "timestamp": 1784394382973
+      },
+      {
+        "executionId": "a9aef92d-6cfb-4374-b628-44780c9fdcd1",
+        "chatSessionId": "sess_8791c918-a699-4948-a559-edf059437c66",
+        "timestamp": 1784410570379
+      },
+      {
+        "executionId": "a9aef92d-6cfb-4374-b628-44780c9fdcd1",
+        "chatSessionId": "sess_8791c918-a699-4948-a559-edf059437c66",
+        "timestamp": 1784410718172
+      }
+    ],
+    "6.1 In the data `useEffect` of `GlobeView.tsx`, change `pointColor` on the `pointsData` layer to a fully transparent color, keeping `pointLat`/`pointLng`/`pointAltitude`/`pointRadius`/`onPointClick`/`pointLabel` unchanged": [
+      {
+        "executionId": "a9aef92d-6cfb-4374-b628-44780c9fdcd1",
+        "chatSessionId": "sess_8791c918-a699-4948-a559-edf059437c66",
+        "timestamp": 1784394383047
+      },
+      {
+        "executionId": "a9aef92d-6cfb-4374-b628-44780c9fdcd1",
+        "chatSessionId": "sess_8791c918-a699-4948-a559-edf059437c66",
+        "timestamp": 1784410736213
+      },
+      {
+        "executionId": "a9aef92d-6cfb-4374-b628-44780c9fdcd1",
+        "chatSessionId": "sess_8791c918-a699-4948-a559-edf059437c66",
+        "timestamp": 1784410799652
+      }
+    ],
+    "6.2 Remove the `labelsData(...)` block (the purple text label) entirely": [
+      {
+        "executionId": "a9aef92d-6cfb-4374-b628-44780c9fdcd1",
+        "chatSessionId": "sess_8791c918-a699-4948-a559-edf059437c66",
+        "timestamp": 1784394383097
+      },
+      {
+        "executionId": "a9aef92d-6cfb-4374-b628-44780c9fdcd1",
+        "chatSessionId": "sess_8791c918-a699-4948-a559-edf059437c66",
+        "timestamp": 1784410803973
+      },
+      {
+        "executionId": "a9aef92d-6cfb-4374-b628-44780c9fdcd1",
+        "chatSessionId": "sess_8791c918-a699-4948-a559-edf059437c66",
+        "timestamp": 1784410854508
+      }
+    ],
+    "6.3 Build a combined entries array merging the existing `geoLabels` entries with new memory-badge entries (`{ kind: 'memory-badge', memory, lat, lng }` derived from `memories`), pass it to the single `.htmlElementsData(...)` call, and branch the `.htmlElement()` factory on `d.kind`: keep the existing geo-text element construction unchanged for geo entries, and call `createMemoryBadgeElement(d.memory)` for memory-badge entries without applying the altitude-based opacity/size scaling used for geo text": [
+      {
+        "executionId": "a9aef92d-6cfb-4374-b628-44780c9fdcd1",
+        "chatSessionId": "sess_8791c918-a699-4948-a559-edf059437c66",
+        "timestamp": 1784394383152
+      },
+      {
+        "executionId": "a9aef92d-6cfb-4374-b628-44780c9fdcd1",
+        "chatSessionId": "sess_8791c918-a699-4948-a559-edf059437c66",
+        "timestamp": 1784410860028
+      },
+      {
+        "executionId": "a9aef92d-6cfb-4374-b628-44780c9fdcd1",
+        "chatSessionId": "sess_8791c918-a699-4948-a559-edf059437c66",
+        "timestamp": 1784410991835
+      }
+    ],
+    "7. Final checkpoint - Ensure all tests pass and the app builds": [
+      {
+        "executionId": "a9aef92d-6cfb-4374-b628-44780c9fdcd1",
+        "chatSessionId": "sess_8791c918-a699-4948-a559-edf059437c66",
+        "timestamp": 1784394383198
+      },
+      {
+        "executionId": "a9aef92d-6cfb-4374-b628-44780c9fdcd1",
+        "chatSessionId": "sess_8791c918-a699-4948-a559-edf059437c66",
+        "timestamp": 1784410999784
+      },
+      {
+        "executionId": "a9aef92d-6cfb-4374-b628-44780c9fdcd1",
+        "chatSessionId": "sess_8791c918-a699-4948-a559-edf059437c66",
+        "timestamp": 1784411163120
+      }
+    ],
+    "2. Implement per-city icon resolution module": [
+      {
+        "executionId": "a9aef92d-6cfb-4374-b628-44780c9fdcd1",
+        "chatSessionId": "sess_8791c918-a699-4948-a559-edf059437c66",
+        "timestamp": 1784410026591
+      }
+    ],
+    "3. Implement the marker badge DOM factory": [
+      {
+        "executionId": "a9aef92d-6cfb-4374-b628-44780c9fdcd1",
+        "chatSessionId": "sess_8791c918-a699-4948-a559-edf059437c66",
+        "timestamp": 1784410389628
+      }
+    ],
+    "5. Wire pointer-driven auto-rotate pause/resume into GlobeView": [
+      {
+        "executionId": "a9aef92d-6cfb-4374-b628-44780c9fdcd1",
+        "chatSessionId": "sess_8791c918-a699-4948-a559-edf059437c66",
+        "timestamp": 1784410718213
+      }
+    ],
+    "6. Replace the purple dot and text label with the marker badge layer": [
+      {
+        "executionId": "a9aef92d-6cfb-4374-b628-44780c9fdcd1",
+        "chatSessionId": "sess_8791c918-a699-4948-a559-edf059437c66",
+        "timestamp": 1784410991889
+      }
+    ]
+  }
+}
