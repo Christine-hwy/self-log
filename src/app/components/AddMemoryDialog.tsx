@@ -1,7 +1,10 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo, useReducer } from 'react';
 import { X, Upload, MapPin } from 'lucide-react';
 import { TravelMemory, MediaFile } from '../../data/site';
 import { MediaUpload } from './MediaUpload';
+import { PlaceSearchField } from './PlaceSearchField';
+import { createLocalPlaceLookupService } from '../utils/placeLookupService';
+import { locationFieldsReducer, initialLocationFieldsState } from '../utils/locationFieldsReducer';
 
 interface AddMemoryDialogProps {
   isOpen: boolean;
@@ -12,20 +15,45 @@ interface AddMemoryDialogProps {
 }
 
 export function AddMemoryDialog({ isOpen, onClose, onAdd, initialLat, initialLng }: AddMemoryDialogProps) {
-  const [location, setLocation] = useState('');
-  const [lat, setLat] = useState(initialLat?.toString() || '');
-  const [lng, setLng] = useState(initialLng?.toString() || '');
+  const [locationFields, dispatchLocationFields] = useReducer(
+    locationFieldsReducer,
+    initialLocationFieldsState(initialLat, initialLng)
+  );
   const [date, setDate] = useState('');
   const [description, setDescription] = useState('');
   const [photos, setPhotos] = useState<MediaFile[]>([]);
   const [videos, setVideos] = useState<MediaFile[]>([]);
   const [isAnimating, setIsAnimating] = useState(false);
 
+  // Memoized so the same `PlaceLookupService` instance (and, by extension,
+  // the same `createSearchController`/dataset-loading closure inside
+  // `PlaceSearchField`) is reused across re-renders instead of being
+  // recreated every render.
+  const placeLookupService = useMemo(() => createLocalPlaceLookupService(), []);
+
   useEffect(() => {
     if (isOpen) {
       setIsAnimating(true);
-      if (initialLat !== undefined) setLat(initialLat.toFixed(4));
-      if (initialLng !== undefined) setLng(initialLng.toFixed(4));
+      // `initializeCoords` requires both lat/lng as numbers, but
+      // `initialLat`/`initialLng` are independent optional props. The
+      // pre-refactor code set them independently via two separate `if`
+      // statements, so a single provided coordinate could be applied on its
+      // own even when the other was absent. To preserve that exact
+      // behavior: when both are provided (the common globe-click case), use
+      // `initializeCoords` in one dispatch; otherwise, fall back to
+      // dispatching `editLat`/`editLng` independently (each still formatted
+      // with `.toFixed(4)`, matching the original formatting) so a lone
+      // coordinate is still applied.
+      if (initialLat !== undefined && initialLng !== undefined) {
+        dispatchLocationFields({ type: 'initializeCoords', lat: initialLat, lng: initialLng });
+      } else {
+        if (initialLat !== undefined) {
+          dispatchLocationFields({ type: 'editLat', value: initialLat.toFixed(4) });
+        }
+        if (initialLng !== undefined) {
+          dispatchLocationFields({ type: 'editLng', value: initialLng.toFixed(4) });
+        }
+      }
     }
   }, [isOpen, initialLat, initialLng]);
 
@@ -34,12 +62,12 @@ export function AddMemoryDialog({ isOpen, onClose, onAdd, initialLat, initialLng
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!location || !lat || !lng || !date) return;
+    if (!locationFields.location || !locationFields.lat || !locationFields.lng || !date) return;
 
     onAdd({
-      location,
-      lat: parseFloat(lat),
-      lng: parseFloat(lng),
+      location: locationFields.location,
+      lat: parseFloat(locationFields.lat),
+      lng: parseFloat(locationFields.lng),
       date,
       description,
       photos,
@@ -47,9 +75,7 @@ export function AddMemoryDialog({ isOpen, onClose, onAdd, initialLat, initialLng
     });
 
     // Reset form
-    setLocation('');
-    setLat('');
-    setLng('');
+    dispatchLocationFields({ type: 'reset' });
     setDate('');
     setDescription('');
     setPhotos([]);
@@ -59,15 +85,13 @@ export function AddMemoryDialog({ isOpen, onClose, onAdd, initialLat, initialLng
 
   return (
     <div
-      className={`fixed inset-0 z-50 flex items-center justify-center p-4 transition-all duration-300 ${
-        isOpen ? 'bg-black/60 backdrop-blur-md' : 'bg-black/0 backdrop-blur-none pointer-events-none'
-      }`}
+      className={`fixed inset-0 z-50 flex items-center justify-center p-4 transition-all duration-300 ${isOpen ? 'bg-black/60 backdrop-blur-md' : 'bg-black/0 backdrop-blur-none pointer-events-none'
+        }`}
       onClick={onClose}
     >
       <div
-        className={`relative w-full max-w-2xl max-h-[90vh] overflow-y-auto bg-gradient-to-b from-slate-900/95 to-slate-950/95 rounded-2xl border border-violet-500/20 shadow-2xl shadow-violet-500/10 backdrop-blur-xl transition-all duration-300 ${
-          isOpen ? 'opacity-100 scale-100' : 'opacity-0 scale-95'
-        }`}
+        className={`relative w-full max-w-2xl max-h-[90vh] overflow-y-auto bg-gradient-to-b from-slate-900/95 to-slate-950/95 rounded-2xl border border-violet-500/20 shadow-2xl shadow-violet-500/10 backdrop-blur-xl transition-all duration-300 ${isOpen ? 'opacity-100 scale-100' : 'opacity-0 scale-95'
+          }`}
         onClick={(e) => e.stopPropagation()}
       >
         <button
@@ -87,11 +111,19 @@ export function AddMemoryDialog({ isOpen, onClose, onAdd, initialLat, initialLng
 
           <form onSubmit={handleSubmit} className="space-y-6">
             <div>
+              <label className="block text-sm text-slate-400 mb-2">Search for a Place</label>
+              <PlaceSearchField
+                onSelect={(candidate) => dispatchLocationFields({ type: 'selectPlace', candidate })}
+                service={placeLookupService}
+              />
+            </div>
+
+            <div>
               <label className="block text-sm text-slate-400 mb-2">Location Name</label>
               <input
                 type="text"
-                value={location}
-                onChange={(e) => setLocation(e.target.value)}
+                value={locationFields.location}
+                onChange={(e) => dispatchLocationFields({ type: 'editLocation', value: e.target.value })}
                 placeholder="e.g., Paris, France"
                 className="w-full px-4 py-3 bg-slate-900/50 border border-slate-700/50 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:border-violet-500/50 focus:ring-2 focus:ring-violet-500/20 transition-all"
                 required
@@ -104,8 +136,8 @@ export function AddMemoryDialog({ isOpen, onClose, onAdd, initialLat, initialLng
                 <input
                   type="number"
                   step="any"
-                  value={lat}
-                  onChange={(e) => setLat(e.target.value)}
+                  value={locationFields.lat}
+                  onChange={(e) => dispatchLocationFields({ type: 'editLat', value: e.target.value })}
                   placeholder="48.8566"
                   className="w-full px-4 py-3 bg-slate-900/50 border border-slate-700/50 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:border-violet-500/50 focus:ring-2 focus:ring-violet-500/20 transition-all"
                   required
@@ -116,8 +148,8 @@ export function AddMemoryDialog({ isOpen, onClose, onAdd, initialLat, initialLng
                 <input
                   type="number"
                   step="any"
-                  value={lng}
-                  onChange={(e) => setLng(e.target.value)}
+                  value={locationFields.lng}
+                  onChange={(e) => dispatchLocationFields({ type: 'editLng', value: e.target.value })}
                   placeholder="2.3522"
                   className="w-full px-4 py-3 bg-slate-900/50 border border-slate-700/50 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:border-violet-500/50 focus:ring-2 focus:ring-violet-500/20 transition-all"
                   required

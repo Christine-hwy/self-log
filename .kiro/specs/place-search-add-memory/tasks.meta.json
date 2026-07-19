@@ -1,0 +1,217 @@
+{
+  "pbtResults": {},
+  "executionHistory": {
+    "1. Generate the place dataset": [
+      {
+        "executionId": "1b8e48c1-5ef4-4d40-9941-7502fe7cf434",
+        "chatSessionId": "sess_8791c918-a699-4948-a559-edf059437c66",
+        "timestamp": 1784481310767
+      },
+      {
+        "executionId": "1b8e48c1-5ef4-4d40-9941-7502fe7cf434",
+        "chatSessionId": "sess_8791c918-a699-4948-a559-edf059437c66",
+        "timestamp": 1784481317081
+      },
+      {
+        "executionId": "1b8e48c1-5ef4-4d40-9941-7502fe7cf434",
+        "chatSessionId": "sess_8791c918-a699-4948-a559-edf059437c66",
+        "timestamp": 1784481923790
+      }
+    ],
+    "2.1 Create `src/app/utils/matchPlaces.ts` exporting `matchPlaces(candidates, query, limit = 10)`, performing case-insensitive substring matching on name and sorting by ascending match-index, then ascending name length, then descending population, then ascending name (alphabetical tiebreak), truncated to `limit`": [
+      {
+        "executionId": "1b8e48c1-5ef4-4d40-9941-7502fe7cf434",
+        "chatSessionId": "sess_8791c918-a699-4948-a559-edf059437c66",
+        "timestamp": 1784481310902
+      },
+      {
+        "executionId": "1b8e48c1-5ef4-4d40-9941-7502fe7cf434",
+        "chatSessionId": "sess_8791c918-a699-4948-a559-edf059437c66",
+        "timestamp": 1784481929730
+      },
+      {
+        "executionId": "1b8e48c1-5ef4-4d40-9941-7502fe7cf434",
+        "chatSessionId": "sess_8791c918-a699-4948-a559-edf059437c66",
+        "timestamp": 1784482231709
+      }
+    ],
+    "3.1 Create `src/app/utils/placeLookupService.ts` exporting the `PlaceCandidate` and `PlaceLookupService` interfaces and `createLocalPlaceLookupService()`, which lazy-loads `src/data/places.ts` via a dynamic `import('../../data/places')` (memoized after first load), resolves each city's `countryCode` to a full name via `countryNames` to build `detail`, delegates matching/ranking to `matchPlaces`, and resolves with `[]` instead of throwing if the dynamic import rejects": [
+      {
+        "executionId": "1b8e48c1-5ef4-4d40-9941-7502fe7cf434",
+        "chatSessionId": "sess_8791c918-a699-4948-a559-edf059437c66",
+        "timestamp": 1784481310963
+      },
+      {
+        "executionId": "1b8e48c1-5ef4-4d40-9941-7502fe7cf434",
+        "chatSessionId": "sess_8791c918-a699-4948-a559-edf059437c66",
+        "timestamp": 1784482254724
+      },
+      {
+        "executionId": "1b8e48c1-5ef4-4d40-9941-7502fe7cf434",
+        "chatSessionId": "sess_8791c918-a699-4948-a559-edf059437c66",
+        "timestamp": 1784482991542
+      }
+    ],
+    "4. Checkpoint - Ensure all tests pass": [
+      {
+        "executionId": "1b8e48c1-5ef4-4d40-9941-7502fe7cf434",
+        "chatSessionId": "sess_8791c918-a699-4948-a559-edf059437c66",
+        "timestamp": 1784481311010
+      },
+      {
+        "executionId": "1b8e48c1-5ef4-4d40-9941-7502fe7cf434",
+        "chatSessionId": "sess_8791c918-a699-4948-a559-edf059437c66",
+        "timestamp": 1784482997572
+      },
+      {
+        "executionId": "1b8e48c1-5ef4-4d40-9941-7502fe7cf434",
+        "chatSessionId": "sess_8791c918-a699-4948-a559-edf059437c66",
+        "timestamp": 1784485622952
+      }
+    ],
+    "5.1 Create `src/app/utils/createSearchController.ts` exporting `SearchController` and `createSearchController(service, onResults, options)`: below `minLength` (default 2) invoke `onResults([], query)` synchronously with no service call, debounce service calls by `debounceMs` (default 200ms) of quiescence, tag each dispatched call with a monotonically increasing sequence number and discard results from any call that is not the most recently dispatched, catch `search()` rejections and forward `onResults([], query)`, and implement `dispose()` to cancel any pending debounce timer": [
+      {
+        "executionId": "1b8e48c1-5ef4-4d40-9941-7502fe7cf434",
+        "chatSessionId": "sess_8791c918-a699-4948-a559-edf059437c66",
+        "timestamp": 1784481311063
+      },
+      {
+        "executionId": "1b8e48c1-5ef4-4d40-9941-7502fe7cf434",
+        "chatSessionId": "sess_8791c918-a699-4948-a559-edf059437c66",
+        "timestamp": 1784485631813
+      },
+      {
+        "executionId": "1b8e48c1-5ef4-4d40-9941-7502fe7cf434",
+        "chatSessionId": "sess_8791c918-a699-4948-a559-edf059437c66",
+        "timestamp": 1784485805624
+      }
+    ],
+    "6.1 Create `src/app/utils/locationFieldsReducer.ts` exporting `LocationFieldsState`, `LocationFieldsAction`, `locationFieldsReducer(state, action)` (handling `initializeCoords`, `selectPlace`, `editLocation`, `editLat`, `editLng`, `reset`), and `initialLocationFieldsState(initialLat?, initialLng?)`": [
+      {
+        "executionId": "1b8e48c1-5ef4-4d40-9941-7502fe7cf434",
+        "chatSessionId": "sess_8791c918-a699-4948-a559-edf059437c66",
+        "timestamp": 1784481311128
+      },
+      {
+        "executionId": "1b8e48c1-5ef4-4d40-9941-7502fe7cf434",
+        "chatSessionId": "sess_8791c918-a699-4948-a559-edf059437c66",
+        "timestamp": 1784485811770
+      },
+      {
+        "executionId": "1b8e48c1-5ef4-4d40-9941-7502fe7cf434",
+        "chatSessionId": "sess_8791c918-a699-4948-a559-edf059437c66",
+        "timestamp": 1784485944124
+      }
+    ],
+    "7. Checkpoint - Ensure all tests pass": [
+      {
+        "executionId": "1b8e48c1-5ef4-4d40-9941-7502fe7cf434",
+        "chatSessionId": "sess_8791c918-a699-4948-a559-edf059437c66",
+        "timestamp": 1784481311195
+      },
+      {
+        "executionId": "1b8e48c1-5ef4-4d40-9941-7502fe7cf434",
+        "chatSessionId": "sess_8791c918-a699-4948-a559-edf059437c66",
+        "timestamp": 1784485949311
+      },
+      {
+        "executionId": "1b8e48c1-5ef4-4d40-9941-7502fe7cf434",
+        "chatSessionId": "sess_8791c918-a699-4948-a559-edf059437c66",
+        "timestamp": 1784486018254
+      }
+    ],
+    "8.1 Create `src/app/components/PlaceSearchField.tsx` rendering a text `<input>` styled consistently with the dialog's other fields, feeding a `createSearchController` instance built from the `service` prop; render an absolutely-positioned dropdown (shown only while the query has at least 2 characters) listing up to 10 results with `name` and `detail`, or a \"no matching place found\" message when results are empty; support `ArrowUp`/`ArrowDown`/`Enter`/`Escape` keyboard navigation and mouse selection, calling `onSelect(candidate)`; call the controller's `dispose()` on unmount": [
+      {
+        "executionId": "1b8e48c1-5ef4-4d40-9941-7502fe7cf434",
+        "chatSessionId": "sess_8791c918-a699-4948-a559-edf059437c66",
+        "timestamp": 1784481311236
+      },
+      {
+        "executionId": "1b8e48c1-5ef4-4d40-9941-7502fe7cf434",
+        "chatSessionId": "sess_8791c918-a699-4948-a559-edf059437c66",
+        "timestamp": 1784486024779
+      },
+      {
+        "executionId": "1b8e48c1-5ef4-4d40-9941-7502fe7cf434",
+        "chatSessionId": "sess_8791c918-a699-4948-a559-edf059437c66",
+        "timestamp": 1784486483688
+      }
+    ],
+    "9.1 Replace the `location`/`lat`/`lng` `useState`s with `useReducer(locationFieldsReducer, initialLocationFieldsState(initialLat, initialLng))`; replace the `useEffect` that pushes `initialLat`/`initialLng` into state with a `dispatch({ type: 'initializeCoords', lat: initialLat, lng: initialLng })` call under the same trigger condition; render `PlaceSearchField` (dispatching `selectPlace` on `onSelect`, defaulting its `service` prop to `createLocalPlaceLookupService()`) alongside a manual-entry `<input>` bound to `state.location` dispatching `editLocation`; bind the latitude/longitude `<input>`s to `state.lat`/`state.lng` dispatching `editLat`/`editLng`; update `handleSubmit`'s existing guard and the reset-on-submit logic to read from/dispatch against reducer state instead of the removed `useState`s": [
+      {
+        "executionId": "1b8e48c1-5ef4-4d40-9941-7502fe7cf434",
+        "chatSessionId": "sess_8791c918-a699-4948-a559-edf059437c66",
+        "timestamp": 1784481311279
+      },
+      {
+        "executionId": "1b8e48c1-5ef4-4d40-9941-7502fe7cf434",
+        "chatSessionId": "sess_8791c918-a699-4948-a559-edf059437c66",
+        "timestamp": 1784486492166
+      },
+      {
+        "executionId": "1b8e48c1-5ef4-4d40-9941-7502fe7cf434",
+        "chatSessionId": "sess_8791c918-a699-4948-a559-edf059437c66",
+        "timestamp": 1784486650041
+      }
+    ],
+    "10. Final checkpoint - Ensure all tests pass and the app builds": [
+      {
+        "executionId": "1b8e48c1-5ef4-4d40-9941-7502fe7cf434",
+        "chatSessionId": "sess_8791c918-a699-4948-a559-edf059437c66",
+        "timestamp": 1784481311361
+      },
+      {
+        "executionId": "1b8e48c1-5ef4-4d40-9941-7502fe7cf434",
+        "chatSessionId": "sess_8791c918-a699-4948-a559-edf059437c66",
+        "timestamp": 1784486664823
+      },
+      {
+        "executionId": "1b8e48c1-5ef4-4d40-9941-7502fe7cf434",
+        "chatSessionId": "sess_8791c918-a699-4948-a559-edf059437c66",
+        "timestamp": 1784486754865
+      }
+    ],
+    "2. Implement the pure matching/ranking function": [
+      {
+        "executionId": "1b8e48c1-5ef4-4d40-9941-7502fe7cf434",
+        "chatSessionId": "sess_8791c918-a699-4948-a559-edf059437c66",
+        "timestamp": 1784482231759
+      }
+    ],
+    "3. Implement the `PlaceLookupService` abstraction": [
+      {
+        "executionId": "1b8e48c1-5ef4-4d40-9941-7502fe7cf434",
+        "chatSessionId": "sess_8791c918-a699-4948-a559-edf059437c66",
+        "timestamp": 1784482991681
+      }
+    ],
+    "5. Implement the debounce + stale-result controller": [
+      {
+        "executionId": "1b8e48c1-5ef4-4d40-9941-7502fe7cf434",
+        "chatSessionId": "sess_8791c918-a699-4948-a559-edf059437c66",
+        "timestamp": 1784485805704
+      }
+    ],
+    "6. Implement the location fields reducer": [
+      {
+        "executionId": "1b8e48c1-5ef4-4d40-9941-7502fe7cf434",
+        "chatSessionId": "sess_8791c918-a699-4948-a559-edf059437c66",
+        "timestamp": 1784485944220
+      }
+    ],
+    "8. Implement the `PlaceSearchField` component": [
+      {
+        "executionId": "1b8e48c1-5ef4-4d40-9941-7502fe7cf434",
+        "chatSessionId": "sess_8791c918-a699-4948-a559-edf059437c66",
+        "timestamp": 1784486483786
+      }
+    ],
+    "9. Wire the reducer and `PlaceSearchField` into `AddMemoryDialog.tsx`": [
+      {
+        "executionId": "1b8e48c1-5ef4-4d40-9941-7502fe7cf434",
+        "chatSessionId": "sess_8791c918-a699-4948-a559-edf059437c66",
+        "timestamp": 1784486650119
+      }
+    ]
+  }
+}
