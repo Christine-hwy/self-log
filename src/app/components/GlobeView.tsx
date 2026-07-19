@@ -216,13 +216,13 @@ export function GlobeView({ memories, onLocationClick, onMemoryClick }: GlobeVie
       });
     }
 
-    // 世界地理位置标签（国家/城市），按当前缩放层级过滤，Google Maps 式渐进展示
+    // 世界地理位置标签（仅国家名称，不再展示城市文字标签）
     const visibleGeoLabels = getVisibleGeoLabels(geoLabels, altitude);
     const geoLabelEntries = visibleGeoLabels.map(label => ({
       kind: 'geo-label' as const,
       ...label,
       text: label.name,
-      size: label.kind === 'country' ? 1.2 : label.tier === 'tier1' ? 1.1 : label.tier === 'tier2' ? 0.95 : 0.85,
+      size: 1.2,
     }));
 
     // 记忆点图标徽章（替代原来的紫色圆点+文字标签）
@@ -246,9 +246,9 @@ export function GlobeView({ memories, onLocationClick, onMemoryClick }: GlobeVie
 
         const el = document.createElement('div');
         el.style.cssText = `
-          color: ${d.kind === 'country' ? 'rgba(147, 197, 253, 0.9)' : 'rgba(226, 232, 240, 0.8)'};
-          font-size: ${d.kind === 'country' ? (d.size * 10) : (d.size * 9)}px;
-          font-weight: ${d.kind === 'country' ? '600' : '500'};
+          color: rgba(147, 197, 253, 0.9);
+          font-size: ${d.size * 10}px;
+          font-weight: 600;
           font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
           pointer-events: none;
           user-select: none;
